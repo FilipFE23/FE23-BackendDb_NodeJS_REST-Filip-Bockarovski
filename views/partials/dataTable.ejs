@@ -1,0 +1,22 @@
+<% if(typeof dbData != 'undefined') { %>
+<div class="center">
+  <table>
+    <thead>
+      <tr>
+        <% dbDataHeaders.forEach( header => { %> 
+          <th><%= header.Field; %></th>
+        <% }); %>
+      </tr>
+    </thead>
+    <tbody>
+      <% dbData.forEach( row => { %>
+        <tr>
+          <% dbDataHeaders.forEach ( header => { %>
+            <td><%= row[header.Field]; %></td>
+          <% }); %>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+</div>
+<% } %>
