@@ -28,7 +28,7 @@ app.get('/students/:id/courses', async (req, res) => {
   const sqlStudentDetails = `SELECT fName, lName FROM students WHERE id = ${studentId}`;
   const studentDetails = await db.query(sqlStudentDetails);
   const {fName, lName} = studentDetails[0]; 
-  const pageTitle = `${fName} ${lName} kurser:`;
+  const pageTitle = `${fName} ${lName}s kurser:`;
 
   const sqlStudentCourses = `SELECT courses.* FROM students_courses JOIN courses ON students_courses.courses_id = courses.id WHERE students_courses.students_id = ${studentId}`;
   const dbData = await db.query(sqlStudentCourses);
