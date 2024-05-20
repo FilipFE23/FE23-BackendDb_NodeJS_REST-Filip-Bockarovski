@@ -40,13 +40,28 @@ app.get('/students/:id/courses', async (req, res) => {
 });
 
 app.get('/courses', async (req, res) => {
-  console.log(req.body);
   const pageTitle = 'Courses';
   const sqlCourses = 'SELECT * FROM courses';
   const sqlCoursesHeaders = 'DESCRIBE courses';
   const dbData = await db.query(sqlCourses);
   const dbDataHeaders = await db.query(sqlCoursesHeaders); 
 
+  res.render('table', {dbData, pageTitle, dbDataHeaders});
+});
+
+app.get('/courses/:id/students', async (req, res) => {
+  const coursesId = req.params.id;
+  const sqlCourseDetails = `SELECT name FROM courses WHERE id = ${coursesId}`;
+  const courseDetails = await db.query(sqlCourseDetails);
+  const {name} = courseDetails[0]; 
+  const pageTitle = `Students taking ${name}:`;
+
+  const sqlCourseStudents = `SELECT students.* FROM students_courses JOIN students ON students_courses.students_id = students.id WHERE students_courses.courses_id = ${coursesId}`;
+  const dbData = await db.query(sqlCourseStudents);
+  
+  const sqlStudentsHeaders = 'DESCRIBE students';
+  const dbDataHeaders = await db.query(sqlStudentsHeaders);
+  
   res.render('table', {dbData, pageTitle, dbDataHeaders});
 });
 

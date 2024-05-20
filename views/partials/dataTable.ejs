@@ -9,13 +9,45 @@
       </tr>
     </thead>
     <tbody>
-      <% dbData.forEach( row => { %>
-        <tr>
-          <% dbDataHeaders.forEach ( header => { %>
-            <td><%= row[header.Field]; %></td>
-          <% }); %>
-        </tr>
-      <% }); %>
+      <% if (pageTitle === 'Courses') { %>
+        <% dbData.forEach( row => { %>
+          <tr>
+            <% dbDataHeaders.forEach ((header, cellIndex) => { %>
+              <td>
+                <% if (cellIndex === 0) { %>
+                  <a href="/courses/<%= row.id %>/students"><%= row[header.Field]; %></a>
+                <% } else { %>
+                  <%= row[header.Field]; %>
+                <% }; %>
+              </td>
+            <% }); %>
+          </tr>
+        <% }); %>
+      <% } else if (pageTitle === 'Students') { %>
+        <% dbData.forEach( row => { %>
+          <tr>
+            <% dbDataHeaders.forEach ((header, cellIndex) => { %>
+              <td>
+                <% if (cellIndex === 0) { %>
+                  <a href="/students/<%= row.id %>/courses"><%= row[header.Field]; %></a>
+                <% } else { %>
+                  <%= row[header.Field]; %>
+                <% }; %>
+              </td>
+            <% }); %>
+          </tr>
+        <% }); %>
+      <% } else { %>
+        <% dbData.forEach( row => { %>
+          <tr>
+            <% dbDataHeaders.forEach ( header => { %>
+              <td>
+                  <%= row[header.Field]; %>
+              </td>
+            <% }); %>
+          </tr>
+        <% }); %>
+      <% }; %>
     </tbody>
   </table>
 </div>
