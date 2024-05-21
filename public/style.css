@@ -14,8 +14,7 @@ table, th, td {
 } 
 
 .center {
-  display: flex;
-  justify-content: center;
+  color: blue;
 }
 
 .header {
@@ -26,7 +25,7 @@ table, th, td {
   border-bottom: 1px solid grey;
 }
 
-.header a {
+.aStyle {
   color: black;
   text-decoration: none;
 }

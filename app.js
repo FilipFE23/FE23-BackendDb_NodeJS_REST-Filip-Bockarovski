@@ -15,12 +15,34 @@ app.get('/', async (req, res) => {
 
 app.get('/students', async (req, res) => {
   const pageTitle = 'Students';
+  const dataInfo = 'students';
   const sqlStudents = 'SELECT * FROM students';
-  const sqlStudentsHeaders = 'DESCRIBE students';
   const dbData = await db.query(sqlStudents);
+  
+  const sqlStudentsHeaders = 'DESCRIBE students';
   const dbDataHeaders = await db.query(sqlStudentsHeaders);
   
-  res.render('table', {dbData, pageTitle, dbDataHeaders});
+  res.render('table', {dbData, pageTitle, dbDataHeaders, dataInfo});
+});
+
+app.get('/students/add', async (req, res) => {
+  const pageTitle = 'Students';
+  const dataInfo = 'add student';
+  const sqlStudents = 'SELECT * FROM students';
+  const dbData = await db.query(sqlStudents);
+
+  const sqlStudentsHeaders = 'DESCRIBE students';
+  const dbDataHeaders = await db.query(sqlStudentsHeaders);
+
+  res.render('addData', {dbData, pageTitle, dbDataHeaders, dataInfo});
+});
+
+app.post('/students/add', async (req, res) => {
+  const requestData = req.body;
+  const sqlAddQuery = `INSERT INTO students(fName, lName, town) VALUES('${requestData.fName}', '${requestData.lName}', '${requestData.town}')`;
+  await db.query(sqlAddQuery);
+
+  res.redirect('/students');
 });
 
 app.get('/students/:id/courses', async (req, res) => {
@@ -41,12 +63,35 @@ app.get('/students/:id/courses', async (req, res) => {
 
 app.get('/courses', async (req, res) => {
   const pageTitle = 'Courses';
+  const dataInfo = 'courses';
   const sqlCourses = 'SELECT * FROM courses';
-  const sqlCoursesHeaders = 'DESCRIBE courses';
   const dbData = await db.query(sqlCourses);
+
+  const sqlCoursesHeaders = 'DESCRIBE courses';
   const dbDataHeaders = await db.query(sqlCoursesHeaders); 
 
-  res.render('table', {dbData, pageTitle, dbDataHeaders});
+  res.render('table', {dbData, pageTitle, dbDataHeaders, dataInfo});
+});
+
+// COURSES ADD WIP
+app.get('/courses/add', async (req, res) => {
+  const pageTitle = 'Courses';
+  const dataInfo = 'add course';
+  const sqlCourses = 'SELECT * FROM courses';
+  const dbData = await db.query(sqlCourses);
+
+  const sqlCoursesHeaders = 'DESCRIBE courses';
+  const dbDataHeaders = await db.query(sqlCoursesHeaders);
+
+  res.render('addData', {dbData, pageTitle, dbDataHeaders, dataInfo});
+});
+
+app.post('/courses/add', async (req, res) => {
+  const requestData = req.body;
+  const sqlAddQuery = `INSERT INTO courses(name, description) VALUES('${requestData.name}', '${requestData.description}')`;
+  await db.query(sqlAddQuery);
+  
+  res.redirect('/courses');
 });
 
 app.get('/courses/:id/students', async (req, res) => {
@@ -71,8 +116,9 @@ app.get('/students_courses', async (req, res) => {
   const sqlStudentsCoursesHeaders = 'DESCRIBE students_courses';
   const dbData = await db.query(sqlStudentsCourses);
   const dbDataHeaders = await db.query(sqlStudentsCoursesHeaders); 
+  const dataInfo = 'PLACEHOLDER';
 
-  res.render('table', {dbData, pageTitle, dbDataHeaders});
+  res.render('table', {dbData, pageTitle, dbDataHeaders, dataInfo});
 });
 
 const port = 3000;
