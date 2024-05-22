@@ -1,0 +1,21 @@
+<%- include('partials/head') %>
+<body>
+  <%- include('partials/header') %>
+  <% if (dataInfo === 'remove student') { %> 
+    <h2>Select student id:</h2> 
+    <form action="/students/remove" method="POST">
+      <label for="studentId">Student id:</label>
+      <input type="text" name="studentId" id="studentId">
+      <button type="submit">Remove</button>
+    </form>
+  <% } else if (dataInfo === 'remove course') { %> 
+    <h2>Select course id:</h2> 
+    <form action="/courses/remove" method="POST">
+      <label for="courseId">Course id:</label>
+      <input type="text" name="courseId" id="courseId">
+      <button type="submit">Remove</button>
+    </form>
+  <% } %>
+  <%- include('partials/dataTable') %>
+</body>
+</html>

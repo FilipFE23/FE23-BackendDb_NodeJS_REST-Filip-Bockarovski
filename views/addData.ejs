@@ -1,26 +1,27 @@
 <%- include('partials/head') %>
 <body>
   <%- include('partials/header') %>
-    <% if (dataInfo === 'add student') { %> 
-      <form action="/students/add" method="POST">
-        <label for="fName">First name:</label>
-        <input type="text" name="fName" id="fName" required>
-        <label for="lName">Last name:</label>
-        <input type="text" name="lName" id="lName" required>
-        <label for="town">Town name:</label>
-        <input type="text" name="town" id="town">
-        <button type="submit">Add</button>
-      </form>
-      <%- include('partials/dataTable') %>
-    <% } else if (dataInfo === 'add course') { %> 
-      <form action="/courses/add" method="POST">
-        <label for="namn">Course name:</label>
-        <input type="text" name="name" id="name" required>
-        <label for="description">Description:</label>
-        <input type="text" name="description" id="description">
-        <button type="submit">Add</button>
-      </form>
-      <%- include('partials/dataTable') %>
-    <% } %>
+  <% if (dataInfo === 'add student') { %> 
+    <h2>Student information:</h2>
+    <form action="/students/add" method="POST">
+      <label for="fName">First name:</label>
+      <input type="text" name="fName" id="fName" required>
+      <label for="lName">Last name:</label>
+      <input type="text" name="lName" id="lName" required>
+      <label for="town">Town name:</label>
+      <input type="text" name="town" id="town">
+      <button type="submit">Add</button>
+    </form>
+  <% } else if (dataInfo === 'add course') { %> 
+    <h2>Course information:</h2>
+    <form action="/courses/add" method="POST">
+      <label for="namn">Course name:</label>
+      <input type="text" name="name" id="name" required>
+      <label for="description">Description:</label>
+      <input type="text" name="description" id="description">
+      <button type="submit">Add</button>
+    </form>
+  <% } %>
+  <%- include('partials/dataTable') %>
 </body>
 </html>
