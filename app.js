@@ -83,35 +83,56 @@ app.get('/students/:id/courses', async (req, res) => {
 
 app.get('/students/first_name/:fName/courses', async (req, res) => {
   const firstName = req.params.fName;
-  const sqlFirstNameStudentsDetails = `SELECT * FROM students 
-  JOIN students_courses ON students.id = students_courses.students_id 
+  const pageTitle = `All students with the first name: ${firstName}`;
+  const tableIdentifier = 'student'
+
+  const sqlStudentsByFirstName = `SELECT id, fName, lName FROM students 
+  WHERE students.fName = '${firstName}'`;
+  const dbDataInfo = await db.query(sqlStudentsByFirstName);
+
+  const sqlStudentsCourses = `SELECT students_courses.*, name FROM students 
+  JOIN students_courses ON students.id = students_courses.students_id
   JOIN courses ON courses.id = students_courses.courses_id
   WHERE students.fName = '${firstName}'`;
-  const dbData = await db.query(sqlFirstNameStudentsDetails);
+  const dbDataStudentsCoursesRelations = await db.query(sqlStudentsCourses);
 
-  console.log(dbData);
+  res.render('table', {tableIdentifier, pageTitle, dbDataInfo, dbDataStudentsCoursesRelations})
 });
 
 app.get('/students/last_name/:lName/courses', async (req, res) => {
   const lastName = req.params.lName;
-  const sqlLastNameStudentsDetails = `SELECT * FROM students 
-  JOIN students_courses ON students.id = students_courses.students_id 
+  const pageTitle = `All students with the last name: ${lastName}`;
+  const tableIdentifier = 'student'
+
+  const sqlStudentsByLastName = `SELECT id, fName, lName FROM students 
+  WHERE students.lName = '${lastName}'`;
+  const dbDataInfo = await db.query(sqlStudentsByLastName);
+
+  const sqlStudentsCourses = `SELECT students_courses.*, name FROM students 
+  JOIN students_courses ON students.id = students_courses.students_id
   JOIN courses ON courses.id = students_courses.courses_id
   WHERE students.lName = '${lastName}'`;
-  const dbData = await db.query(sqlLastNameStudentsDetails);
+  const dbDataStudentsCoursesRelations = await db.query(sqlStudentsCourses);
 
-  console.log(dbData);
+  res.render('table', {tableIdentifier, pageTitle, dbDataInfo, dbDataStudentsCoursesRelations})
 });
 
 app.get('/students/town/:town/courses', async (req, res) => {
   const town = req.params.town;
-  const sqltownStudentsDetails = `SELECT * FROM students 
-  JOIN students_courses ON students.id = students_courses.students_id 
+  const pageTitle = `All students from: ${town}`;
+  const tableIdentifier = 'student'
+
+  const sqlStudentsByTown = `SELECT id, fName, lName FROM students 
+  WHERE students.town = '${town}'`;
+  const dbDataInfo = await db.query(sqlStudentsByTown);
+
+  const sqlStudentsCourses = `SELECT students_courses.*, name FROM students 
+  JOIN students_courses ON students.id = students_courses.stuxdents_id
   JOIN courses ON courses.id = students_courses.courses_id
   WHERE students.town = '${town}'`;
-  const dbData = await db.query(sqltownStudentsDetails);
+  const dbDataStudentsCoursesRelations = await db.query(sqlStudentsCourses);
 
-  console.log(dbData);
+  res.render('table', {tableIdentifier, pageTitle, dbDataInfo, dbDataStudentsCoursesRelations})
 });
 
 app.get('/courses', async (req, res) => {

@@ -1,0 +1,31 @@
+<% if(typeof dbDataInfo != 'undefined') { %>
+  <table>
+    <thead>
+      <tr>
+        <td>Student ID</td>
+        <td>Name</td>
+        <td>Course</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (tableIdentifier === 'student') { %>
+        <% dbDataInfo.forEach(student => { %>
+          <tr>
+            <td><%- student.id %></td>
+            <td><%- student.fName %> <%- student.lName %></td>
+            <td>
+              <ul>
+                <% dbDataStudentsCoursesRelations
+                  .filter(course => course.students_id === student.id)
+                  .forEach(course => { %>
+                    <li class="relationLi"><%- course.name %></li>
+                <% }) %>
+              </ul>
+            </td>
+          </tr>
+        <% }); %>
+      <% } else if (tableIdentifier === 'course') { %> 
+      <% } %>
+    </tbody>
+  </table>
+<% } %>

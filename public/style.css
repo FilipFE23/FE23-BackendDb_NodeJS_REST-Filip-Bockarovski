@@ -31,12 +31,16 @@ table, th, td {
 }
 
 .navbar {
-  list-style: none;
   display: flex;
 }
 
 .navbar li {
   margin: 0px 20px;
   display: flex;
+  list-style: none;
   align-items: center;
+}
+
+.relationLi {
+  list-style: none;
 }
