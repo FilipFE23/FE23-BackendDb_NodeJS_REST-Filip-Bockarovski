@@ -2,30 +2,35 @@
   <table>
     <thead>
       <tr>
-        <td>Student ID</td>
+        <td>ID</td>
         <td>Name</td>
-        <td>Course</td>
+        <% if (tableIdentifier === 'student') { %>
+          <td>Courses</td>
+        <% } else if (tableIdentifier === 'course') { %> 
+          <td>Town</td>
+        <% } %>
       </tr>
     </thead>
     <tbody>
-      <% if (tableIdentifier === 'student') { %>
-        <% dbDataInfo.forEach(student => { %>
-          <tr>
-            <td><%- student.id %></td>
-            <td><%- student.fName %> <%- student.lName %></td>
-            <td>
-              <ul>
-                <% dbDataStudentsCoursesRelations
-                  .filter(course => course.students_id === student.id)
-                  .forEach(course => { %>
-                    <li class="relationLi"><%- course.name %></li>
-                <% }) %>
-              </ul>
-            </td>
-          </tr>
-        <% }); %>
-      <% } else if (tableIdentifier === 'course') { %> 
-      <% } %>
+      <% dbDataInfo.forEach(student => { %>
+        <tr>
+          <td><%- student.id %></td>
+          <td><%- student.fName %> <%- student.lName %></td>
+          <td>
+          <% if (tableIdentifier === 'student') { %>
+            <ul>
+              <% dbDataStudentsCoursesRelations
+                .filter(course => course.students_id === student.id)
+                .forEach(course => { %>
+                  <li class="relationLi"><%- course.name %></li>
+              <% }) %>
+            </ul>
+          <% } else if (tableIdentifier === 'course') { %>
+            <%- student.town %>
+          <% } %>
+          </td>
+        </tr>
+      <% }); %>
     </tbody>
   </table>
 <% } %>

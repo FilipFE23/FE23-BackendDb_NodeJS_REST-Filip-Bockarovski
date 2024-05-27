@@ -203,6 +203,50 @@ app.get('/courses/:id/students', async (req, res) => {
   res.render('table', {dbData, pageTitle, dbDataHeaders});
 });
 
+app.get('/courses/name/:name/students', async (req, res) => {
+  const courseName = req.params.name;
+  const pageTitle = `All students taking: ${courseName}`;
+  const tableIdentifier = 'course';
+
+
+
+  const sqlStudentsByTown = `SELECT students.* FROM students 
+  JOIN students_courses ON students.id = students_courses.students_id 
+  JOIN courses ON courses.id = students_courses.courses_id
+  WHERE courses.name = '${courseName}'`;
+  const dbDataInfo = await db.query(sqlStudentsByTown);
+
+  res.render('table', {tableIdentifier, pageTitle, dbDataInfo});
+});
+
+app.get('/courses/name/contains/:word', async (req, res) => {
+  const containsWord = req.params.word;
+  const pageTitle = `Course names containing: ${containsWord}`;
+
+  const sqlCourse = `SELECT * FROM courses 
+  WHERE name LIKE '%${containsWord}%'`;
+  const dbData = await db.query(sqlCourse);
+
+  const sqlCoursesHeaders = 'DESCRIBE courses';
+  const dbDataHeaders = await db.query(sqlCoursesHeaders);
+
+  res.render('table', {dbData, pageTitle, dbDataHeaders})
+});
+
+app.get('/courses/description/contains/:word', async (req, res) => {
+  const containsWord = req.params.word;
+  const pageTitle = `Course descriptions containing: ${containsWord}`;
+
+  const sqlCourse = `SELECT * FROM courses 
+  WHERE description LIKE '%${containsWord}%'`;
+  const dbData = await db.query(sqlCourse);
+
+  const sqlCoursesHeaders = 'DESCRIBE courses';
+  const dbDataHeaders = await db.query(sqlCoursesHeaders);
+
+  res.render('table', {dbData, pageTitle, dbDataHeaders})
+});
+
 app.get('/students_courses', async (req, res) => {
   const pageTitle = 'Students Courses';
   const sqlStudentsCourses = 'SELECT * FROM students_courses';
