@@ -44,3 +44,8 @@ table, th, td {
 .relationLi {
   list-style: none;
 }
+
+.space {
+  display: flex;
+  justify-content: space-around;
+}

@@ -15,6 +15,13 @@
       <input type="text" name="courseId" id="courseId">
       <button type="submit">Remove</button>
     </form>
+  <% } else if (dataInfo === 'remove students_courses') { %>
+    <h2>Select id:</h2>
+    <form action="/students_courses/remove" method="post">
+      <label for="id">id:</label>
+      <input type="id" name="id" id="id">
+      <button type="submit">remove</button>
+    </form>
   <% } %>
   <%- include('partials/dataTable') %>
 </body>

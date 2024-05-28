@@ -39,6 +39,9 @@ app.get('/students/:changeType', async (req, res) => {
     case 'add':
       res.render('addData', {dbData, pageTitle, dbDataHeaders, dataInfo});
       break;
+    case 'update':
+      res.render('updateData.ejs', {dbData, pageTitle, dbDataHeaders, dataInfo})
+      break;
     case 'remove':
       res.render('removeData', {dbData, pageTitle, dbDataHeaders, dataInfo});
       break;
@@ -53,7 +56,12 @@ app.post('/students/:changeType', async (req, res) => {
     case 'add':
       const sqlAddQuery = `INSERT INTO students(fName, lName, town) VALUES('${requestData.fName}', '${requestData.lName}', '${requestData.town}')`;
       await db.query(sqlAddQuery);
-      break;  
+      break;
+    case 'update':
+      const sqlUpdateQuery = `UPDATE students SET fName = '${requestData.fName}', lName = '${requestData.lName}', town = '${requestData.town}' 
+      WHERE id = ${requestData.student_id}`;
+      await db.query(sqlUpdateQuery)
+      break;
     case 'remove':
       const sqlDeleteQuery = `DELETE FROM students WHERE id = ${requestData.studentId}`;
       await db.query(sqlDeleteQuery);
@@ -161,6 +169,9 @@ app.get('/courses/:changeType', async (req, res) => {
     case 'add':
       res.render('addData', {dbData, pageTitle, dbDataHeaders, dataInfo});
       break;
+    case 'update':
+      res.render('updateData.ejs', {dbData, pageTitle, dbDataHeaders, dataInfo})
+      break;
     case 'remove':
       res.render('removeData', {dbData, pageTitle, dbDataHeaders, dataInfo});
       break;
@@ -175,6 +186,11 @@ app.post('/courses/:changeType', async (req, res) => {
     case 'add':
       const sqlAddQuery = `INSERT INTO courses(name, description) VALUES('${requestData.name}', '${requestData.description}')`;
       await db.query(sqlAddQuery);
+      break;
+    case 'update':
+      const sqlUpdateQuery = `UPDATE courses SET name = '${requestData.name}', description = '${requestData.description}' 
+      WHERE id = ${requestData.course_id}`;
+      await db.query(sqlUpdateQuery)
       break;
     case 'remove':
       const sqlDeleteQuery = `DELETE FROM courses WHERE id = ${requestData.courseId}`;
@@ -207,9 +223,6 @@ app.get('/courses/name/:name/students', async (req, res) => {
   const courseName = req.params.name;
   const pageTitle = `All students taking: ${courseName}`;
   const tableIdentifier = 'course';
-
-
-
   const sqlStudentsByTown = `SELECT students.* FROM students 
   JOIN students_courses ON students.id = students_courses.students_id 
   JOIN courses ON courses.id = students_courses.courses_id
@@ -249,13 +262,69 @@ app.get('/courses/description/contains/:word', async (req, res) => {
 
 app.get('/students_courses', async (req, res) => {
   const pageTitle = 'Students Courses';
+  const dataInfo = 'students_courses';
   const sqlStudentsCourses = 'SELECT * FROM students_courses';
   const sqlStudentsCoursesHeaders = 'DESCRIBE students_courses';
   const dbData = await db.query(sqlStudentsCourses);
   const dbDataHeaders = await db.query(sqlStudentsCoursesHeaders); 
-  const dataInfo = 'PLACEHOLDER';
 
   res.render('table', {dbData, pageTitle, dbDataHeaders, dataInfo});
+});
+
+app.get('/students_courses/:changeType', async (req, res) => {
+  const dataChange = req.params.changeType
+  const pageTitle = 'Students Courses';
+  const dataInfo = `${dataChange} students_courses`;
+  const sqlStudentsCourses = 'SELECT * FROM students_courses';
+  const dbData = await db.query(sqlStudentsCourses);
+
+  const sqlStudentsCoursesHeaders = 'DESCRIBE students_courses';
+  const dbDataHeaders = await db.query(sqlStudentsCoursesHeaders);
+  
+  const sqlDescribeStudents = 'DESCRIBE students';
+  const sqlStudents = 'SELECT * FROM students';
+  const dbStudentsHeader = await db.query(sqlDescribeStudents);
+  const dbStudents = await db.query(sqlStudents);
+
+  const sqlDescribeCourses = 'DESCRIBE courses';
+  const sqlCourses = 'SELECT * FROM courses';
+  const dbCoursesHeader = await db.query(sqlDescribeCourses);
+  const dbCourses = await db.query(sqlCourses);
+
+  switch (dataChange) {
+    case 'add':
+      res.render('addData', {dbData, pageTitle, dbDataHeaders, dataInfo});
+      break;
+    case 'update':
+      res.render('updateData.ejs', {dbData, pageTitle, dbDataHeaders, dataInfo, dbStudentsHeader, dbStudents, dbCoursesHeader, dbCourses})
+      break;
+    case 'remove':
+      res.render('removeData', {dbData, pageTitle, dbDataHeaders, dataInfo});
+      break;
+  };
+});
+
+app.post('/students_courses/:changeType', async (req, res) => {
+  const dataChange = req.params.changeType
+  const requestData = req.body;
+
+  switch (dataChange) {
+    case 'add':
+      const sqlAddQuery = `INSERT INTO students_courses(students_id, courses_id) VALUES('${requestData.studentsId}', '${requestData.coursesId}')`;
+      await db.query(sqlAddQuery);
+      break;
+    case 'update':
+      const sqlUpdateQuery = `UPDATE students_courses SET students_id = '${requestData.studentsId}', courses_id = '${requestData.coursesId}' 
+      WHERE id = ${requestData.student_course_id}`;
+      await db.query(sqlUpdateQuery)
+      break;
+    case 'remove':
+      const sqlDeleteQuery = `DELETE FROM students_courses WHERE id = ${requestData.id}`;
+      await db.query(sqlDeleteQuery);
+      break;
+  };
+  
+  res.redirect('/students_courses');
 });
 
 const port = 3000;

@@ -21,6 +21,15 @@
       <input type="text" name="description" id="description">
       <button type="submit">Add</button>
     </form>
+  <% } else if (dataInfo === 'add students_courses') { %>
+    <h2>Student course relation:</h2>
+    <form action="/students_courses/add" method="POST">
+      <label for="studentsId">Student id:</label>
+      <input type="text" name="studentsId" id="studentsId" required>
+      <label for="coursesId">Course id:</label>
+      <input type="text" name="coursesId" id="coursesId" required>
+      <button type="submit">Add</button>
+    </form>
   <% } %>
   <%- include('partials/dataTable') %>
 </body>
